@@ -1,0 +1,301 @@
+/*
+ Theme Name:   WWE
+ Theme URI:    https://artesans.eu
+ Description:  WWE Child Theme from Scopely Theme.
+ Author:       Artesans
+ Author URI:   https://artesans.eu
+ Template:     scopelyblogs
+ Version:      1.0.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+ Tags:         custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+ Text Domain:  wwe
+*/
+
+body {
+    background-size: 100%;
+}
+
+.accent-tipo {
+    letter-spacing: 1px;
+    font-weight: normal;
+}
+
+/* HEADER */
+
+.site-header:before {
+    height: 130px;
+}
+
+.site-header .site-logo img {
+    height: 70px;
+    max-width: none;
+    width: auto;
+}
+
+.single .site-header .site-branding.logo-left .site-logo img,
+.site-header .site-branding.logo-left .site-logo img {
+    height: 65px;
+}
+
+@media (min-width: 375px) {
+
+    .site-header .site-logo img {
+        max-width: none;
+        width: auto;
+    }
+
+    .single .site-header .site-branding.logo-left {
+        top: -10px;
+    }
+
+}
+
+@media (min-width: 640px) {
+    .single .site-header .site-branding.logo-left .site-logo img,
+    .site-header .site-branding.logo-left .site-logo img {
+        height: 100px;
+    }
+}
+
+.main-navigation .menu li {
+    font-size: 24px;
+    line-height: 1;
+}
+
+/* ARCHIVE */
+.blog-archive .page-title,
+.related-section .page-title,
+.error-404 .page-title,
+.blog-archive .related-title,
+.related-section .related-title,
+.error-404 .related-title {
+    color: white;
+    font-weight: normal;
+}
+
+.blog-archive .show-more, 
+.related-section .show-more, 
+.error-404 .show-more {
+    font-size: 24px;
+    line-height: 25px;
+}
+
+.blog-archive, .related-section, .error-404 {
+    padding: 60px 0;
+}
+
+.featured-posts {
+    position: relative;
+    z-index: 2;
+}
+
+.site-main {
+    position: relative;
+}
+
+.site-main > div {
+    position: relative;
+    z-index: 2;
+}
+
+.archive .site-main:before {
+    content: "";
+    -webkit-box-shadow: 0 0 120px 120px #000;
+    box-shadow: 0 0 120px 120px #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0px;
+    z-index: 1;
+}
+
+@media (min-width: 640px) {
+    .site-main:before {
+        content: "";
+        -webkit-box-shadow: 0 0 120px 120px #000;
+        box-shadow: 0 0 120px 120px #000;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 0px;
+        z-index: 1;
+    }
+}
+
+.site-main:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 0px;
+    z-index: 1;
+    -webkit-box-shadow: 0 0 200px 200px #000;
+    box-shadow: 0 0 200px 200px #000;
+    bottom: 0;
+}
+
+.post .post-category {
+    z-index: 1;
+}
+
+.blog-archive .post img, 
+.related-section .post img, 
+.error-404 .post img {
+    clip-path: polygon(100% 0, 100% 83%, 91% 100%, 0 100%, 0 0);
+}
+
+/* SINGLE */
+.blog-single {
+    background-color: transparent;
+}
+
+.blog-single > div {
+    background-color: rgba(0,0,0,0.5);
+}
+
+@media (min-width: 640px) {
+
+    .blog-single > div {
+        padding-left: 80px;
+        padding-right: 80px;
+    }
+}
+
+.blog-single .singular-post .post-title {
+    margin-top: 0;
+}
+
+.post-meta, .post-content > *:not(.has-text-color), 
+.blog-single .post-meta a {
+    color: white;
+}
+
+.blog-single .comments-area .comment-list .comment-body,
+.blog-single .comments-area .comment-list .children .comment {
+    background-color: black;
+    background-image: url('assets/images/bg_comments.jpg');
+    background-size: cover;
+}
+
+.blog-single .comments-area .comment-list .children .comment .comment-body {
+    margin-bottom: 0;
+    border-color: black;
+}
+
+.blog-single .comments-area .comment-list .comment-body,
+.blog-single .comments-area .comment-list .comment-body .comment-metadata a,
+.blog-single .comments-area .comment-list .comment-body .comment-content p,
+.blog-single .comments-area .comment-list .comment-body .cld-like-dislike-wrap {
+    color: white;
+}
+
+.blog-single .comments-area .comment-form label {
+    color: #333;
+    z-index: 1;
+}
+
+.blog-single .comments-area .comment-form input[type="text"],
+.blog-single .comments-area .comment-form input[type="email"],
+.blog-single .comments-area .comment-form input[type="url"],
+.blog-single .comments-area .comment-form textarea {
+    color: #333;
+    background-color: white;
+    box-shadow: none;
+}
+
+.blog-single .comments-area .comment-form input[type="text"],
+.blog-single .comments-area .comment-form input[type="email"],
+.blog-single .comments-area .comment-form input[type="url"] {
+    padding-left: 80px;
+    width: calc(100% - 95px);
+}
+
+.blog-single .comments-area .comment-form textarea {
+    padding-top: 50px;
+}
+
+
+.blog-single .comments-area .comment-form input[type="checkbox"] + label {
+    color: white;
+}
+
+.blog-single .comments-area .comment-form input[type="submit"] {
+    font-size: 21px;
+}
+
+.post-content blockquote p {
+    font-family: "Titillium";
+    font-weight: normal;
+}
+
+.post .post-category a {
+    font-size: 14px;
+}
+
+.blog-single .singular-post .post-thumbnail img {
+    clip-path: polygon(100% 0, 100% 89%, 94% 100%, 0 100%, 0 0);
+}
+
+@media (min-width: 640px) {
+
+    .post .post-category a {
+        font-size: 17px;
+    }
+}
+
+.related-section {
+    position: relative;
+    background-color:transparent;
+    z-index: 3;
+    overflow:hidden;
+}
+
+.related-section > div {
+    position: relative;
+    z-index: 2;
+}
+
+.related-section:after {
+    content: "";
+    -webkit-box-shadow: 0 0 120px 120px #000;
+    box-shadow: 0 0 120px 120px #000;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0px;
+    z-index: 1;
+}
+
+/* FOOTER */
+
+.site-footer > div {
+    position: relative;
+    z-index: 2;
+}
+
+.site-footer:before {
+    content: "";
+    -webkit-box-shadow: 0 0 120px 120px #000;
+    box-shadow: 0 0 120px 120px #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0px;
+    z-index: 1;
+}
+.site-footer {
+    z-index: 2;
+    overflow: hidden;
+}
+.site-footer .footer-download .download-title {
+    font-style: italic;
+}
+
+.site-footer .social-icon {
+    background-size: 100%;
+}
