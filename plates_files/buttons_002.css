@@ -1,0 +1,130 @@
+.nav-button {
+    background-image: url('../images/ic_hamburger.svg');
+}
+
+.nav-close-button {
+    background-image: url('../images/ic_close.svg');
+}
+
+.search-submit {
+    background-image: url('../images/ic_search.svg');
+}
+
+.mc4wp-form input[type="submit"],
+.sailthru-add-subscriber-form button[type="submit"] {
+    background-image: url('../images/ic_newsletter_arrow.svg');
+}
+
+.social-icon.facebook-icon {
+    background-image: url('../images/ic_facebook.png');
+}
+
+.social-icon.twitter-icon {
+    background-image: url('../images/ic_twitter.png');
+}
+
+.social-icon.instagram-icon {
+    background-image: url('../images/ic_instagram.png');
+}
+
+.social-icon.youtube-icon {
+    background-image: url('../images/ic_youtube.png');
+}
+
+.social-icon.reddit-icon {
+    background-image: url('../images/ic_reddit.png');
+}
+
+.social-icon.discord-icon {
+    background-image: url('../images/ic_discord.png');
+}
+
+.social-icon.wiki-icon {
+    background-image: url('../images/ic_wiki.png');
+}
+
+.social-icon.vanilla-icon {
+    background-image: url('../images/ic_vanilla.svg');
+}
+
+.main-navigation .menu li.menu-news {
+    background-image: url('../images/cat_news.svg');
+}
+
+.main-navigation .menu li.menu-guides {
+    background-image: url('../images/cat_guides.svg');
+}
+
+.main-navigation .menu li.menu-community {
+    background-image: url('../images/cat_community.svg');
+}
+
+.main-navigation .menu li.menu-events {
+    background-image: url('../images/cat_events.svg');
+}
+
+.main-navigation .menu li.menu-gamepedia {
+    background-image: url('../images/cat_gamepedia.svg');
+}
+
+.post-category {
+    background-image: url('../images/ic_cat.png');
+}
+
+.show-more {
+    background-image: url('../images/button_showmore.svg');
+}
+
+.post-content li:before {
+    background-image: url('../images/ic_list.svg');
+}
+
+.comment-form input[type="submit"] {
+    background-image: url('../images/button_submit.svg');
+}
+
+.comment-reply-link:after {
+    background-image: url('../images/ic_reply.svg');
+}
+
+.cld-like-wrap a:before {
+    background-image: url('../images/ic_comments_thumbup.svg');
+}
+
+.cld-dislike-wrap a:before {
+    background-image: url('../images/ic_comments_thumbdown.svg');
+}
+
+
+.post-sharing .share-icon.share-facebook-icon {
+    background-image: url('../images/ic_share_facebook.svg');
+    width: 23px;
+}
+
+.post-sharing .share-icon.share-twitter-icon {
+    background-image: url('../images/ic_share_twitter.svg');
+}
+
+.post-sharing .share-icon.share-whatsapp-icon {
+    background-image: url('../images/ic_share_whatsapp.svg');
+}
+
+.post-sharing .share-icon.share-email-icon {
+    background-image: url('../images/ic_share_email.svg');
+}
+
+.post-sharing .share-icon.share-copy-icon {
+    background-image: url('../images/ic_share_copy.svg');
+}
+
+.back-to-top {
+    background-image: url('../images/ic_back_top.svg');
+}
+
+#scopely-popup .uk-modal-close {
+    background-image: url('../images/ic_close_popup.svg');
+}
+
+#scopely-popup .popup-button {
+    background-image: url('../images/button_popup.svg');
+}
