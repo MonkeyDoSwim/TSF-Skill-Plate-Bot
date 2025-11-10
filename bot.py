@@ -141,8 +141,6 @@ for kw in ["trap", "bleed", "botch", "multiply", "yellow", "black"]:
 
 # ================= SLASH COMMANDS =================
 
-@bot.tree.command(name="sp", description="Search plates (supports multiple words)")
-@app_commands.describe(query="Example: trap red")
 @bot.tree.command(name="sp", description="Browse or search plates. Type words to filter.")
 @app_commands.describe(query="Optional keywords to filter plates")
 async def slash_sp(inter, query: str = None):
