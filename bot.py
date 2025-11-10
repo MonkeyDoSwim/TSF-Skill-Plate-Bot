@@ -191,7 +191,7 @@ async def slash_sp(inter, query: str = None):
 
         if len(pages) > 1:
             prev = Button(label="◀️", style=discord.ButtonStyle.secondary)
-            nextb = Button(label="▶️", style=discord.ButtonStyle.secondary)
+            btn_next = Button(label="▶️", style=discord.ButtonStyle.secondary)
 
             async def prev_page(interaction):
                 await show_page(interaction, (idx - 1) % len(pages))
@@ -200,9 +200,9 @@ async def slash_sp(inter, query: str = None):
                 await show_page(interaction, (idx + 1) % len(pages))
 
             prev.callback = prev_page
-            nextb.callback = next_page
+            btn_next.callback = next_page
             view.add_item(prev)
-            view.add_item(nextb)
+            view.add_item(btn_next)
 
         return view
 
