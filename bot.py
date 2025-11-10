@@ -5,7 +5,6 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from bs4 import BeautifulSoup
-from discord.ui import View, Select, Button
 
 # ================= CONFIG =================
 
@@ -13,8 +12,6 @@ TOKEN = os.getenv("PLATE_DISCORD_TOKEN")
 if not TOKEN:
     print("❌ ERROR: Set environment variable PLATE_DISCORD_TOKEN")
     raise SystemExit(1)
-
-GUILD_ID = int(os.getenv("PLATE_GUILD_ID", "0"))
 
 HTML_FILES = ["plates.html", "123.htm"]
 IMAGE_FOLDER = "plates_files"
@@ -71,25 +68,26 @@ def load_plates():
 
 
 def search(query: str):
-    query_words = query.lower().split()
-    scored = []
-
+    words = query.lower().split()
+    results = []
     for p in plates:
         text = (p["name"] + " " + p["desc"]).lower()
-        score = 0
+        if all(w in text for w in words):
+            results.append(p)
+    return results
 
-        for w in query_words:
-            if w in text:
-                score += 2
-        for w in query_words:
-            if any(w in word for word in text.split()):
-                score += 1
 
-        if score > 0:
-            scored.append((score, p))
+async def send_list(ctx, results):
+    if not results:
+        return await ctx.send("❌ No matching plates.")
 
-    scored.sort(key=lambda x: x[0], reverse=True)
-    return [p for score, p in scored]
+    for p in results[:5]:
+        embed = discord.Embed(title=p["name"], description=p["desc"], color=discord.Color.blue())
+        file = None
+        if p["img"]:
+            file = discord.File(p["img"], filename="thumb.png")
+            embed.set_thumbnail(url="attachment://thumb.png")
+        await ctx.send(embed=embed, file=file)
 
 
 async def send_single(inter, plate):
@@ -101,41 +99,19 @@ async def send_single(inter, plate):
     await inter.response.send_message(embed=embed, file=file)
 
 
-async def send_related(inter, results):
-    related = results[1:4]
-    if not related:
-        return
-
-    await inter.followup.send("🔍 **Similar Plates:**")
-
-    for p in related:
-        embed = discord.Embed(title=p["name"], description=p["desc"], color=discord.Color.dark_blue())
-        file = None
-        if p["img"]:
-            file = discord.File(p["img"], filename="thumb.png")
-            embed.set_thumbnail(url="attachment://thumb.png")
-        await inter.followup.send(embed=embed, file=file)
-
-
 # ================= READY =================
 
 @bot.event
 async def on_ready():
     print(f"🤖 Logged in as {bot.user}")
     load_plates()
-
     try:
         await bot.tree.sync()
-        print("✅ Global slash commands synced.")
-        if GUILD_ID:
-            guild = discord.Object(id=GUILD_ID)
-            bot.tree.copy_global_to(guild=guild)
-            await bot.tree.sync(guild=guild)
-            print(f"⚡ Guild slash commands synced for {GUILD_ID}.")
+        print("✅ Slash commands synced globally.")
+        print("⏳ They may take ~30–90 minutes to appear the first time.")
     except Exception as e:
         print("⚠️ Slash sync failed:", e)
-
-    await bot.change_presence(activity=discord.Game(name="!sp | /sp | /suggest"))
+    await bot.change_presence(activity=discord.Game(name="!sp trap red  |  /sp"))
 
 
 # ================= TEXT COMMANDS =================
@@ -150,30 +126,31 @@ async def reload(ctx):
 async def sp(ctx, *, query=None):
     if not query:
         return await ctx.send("Usage: `!sp <keywords>`")
-    results = search(query)
-    if not results:
-        return await ctx.send("❌ No matching plates.")
-    for p in results[:5]:
-        embed = discord.Embed(title=p["name"], description=p["desc"], color=discord.Color.blue())
-        file = None
-        if p["img"]:
-            file = discord.File(p["img"], filename="thumb.png")
-            embed.set_thumbnail(url="attachment://thumb.png")
-        await ctx.send(embed=embed, file=file)
+    await send_list(ctx, search(query))
 
 
-# ================= UPDATED /sp WITH OPTIONAL FILTER =================
+def make_text_shortcut(name):
+    @bot.command(name=name)
+    async def _cmd(ctx, *, extra=""):
+        await send_list(ctx, search(name + " " + extra))
 
+
+for kw in ["trap", "bleed", "botch", "multiply", "yellow", "black"]:
+    make_text_shortcut(kw)
+
+
+# ================= SLASH COMMANDS =================
+
+@bot.tree.command(name="sp", description="Search plates (supports multiple words)")
+@app_commands.describe(query="Example: trap red")
 @bot.tree.command(name="sp", description="Browse or search plates. Type words to filter.")
-@app_commands.describe(query="Optional keywords, example: 'blue trap' or 'moment bliss'")
+@app_commands.describe(query="Optional keywords to filter plates")
 async def slash_sp(inter, query: str = None):
 
-    # If user typed search words, filter via scoring
     if query:
-        results = search(query)
-        if not results:
-            return await inter.response.send_message("❌ No plates found for that search.", ephemeral=True)
-        list_to_show = results
+        list_to_show = search(query)
+        if not list_to_show:
+            return await inter.response.send_message("❌ No plates found for that search.")
     else:
         list_to_show = plates
 
@@ -181,121 +158,60 @@ async def slash_sp(inter, query: str = None):
     pages = [list_to_show[i:i+PAGE_SIZE] for i in range(0, len(list_to_show), PAGE_SIZE)]
     page_index = 0
 
-    def make_view(page):
+    async def show_page(interaction, idx):
+        embed = discord.Embed(
+            title=f"📄 Skill Plates — Page {idx+1}/{len(pages)}",
+            description="\n".join(f"• **{p['name']}**" for p in pages[idx]),
+            color=discord.Color.blurple()
+        )
+        await interaction.response.edit_message(embed=embed, view=make_view(idx))
+
+    def make_view(idx):
         view = View()
 
         class PlateSelect(Select):
             def __init__(self):
-                options = [
-                    discord.SelectOption(label=p["name"][:100], value=p["name"])
-                    for p in page
-                ]
-                super().__init__(placeholder="Choose a plate", options=options)
+                super().__init__(
+                    placeholder="Select a plate",
+                    options=[discord.SelectOption(label=p["name"][:100], value=p["name"]) for p in pages[idx]]
+                )
 
             async def callback(self, interaction):
                 plate = next((x for x in plates if x["name"] == self.values[0]), None)
-                if not plate:
-                    return await interaction.response.send_message("❌ Plate not found.", ephemeral=True)
-
+                await interaction.response.defer()
                 embed = discord.Embed(title=plate["name"], description=plate["desc"], color=discord.Color.dark_gold())
-                file = None
                 if plate["img"]:
                     file = discord.File(plate["img"], filename="thumb.png")
                     embed.set_thumbnail(url="attachment://thumb.png")
-
-                await interaction.response.send_message(embed=embed, file=file)
+                    await interaction.followup.send(embed=embed, file=file)
+                else:
+                    await interaction.followup.send(embed=embed)
 
         view.add_item(PlateSelect())
 
-        async def prev(interaction):
-            nonlocal page_index
-            page_index = (page_index - 1) % len(pages)
-            await interaction.response.edit_message(content=f"📄 Page {page_index+1}/{len(pages)}", view=make_view(pages[page_index]))
-
-        async def next(interaction):
-            nonlocal page_index
-            page_index = (page_index + 1) % len(pages)
-            await interaction.response.edit_message(content=f"📄 Page {page_index+1}/{len(pages)}", view=make_view(pages[page_index]))
-
         if len(pages) > 1:
-            btn_prev = Button(label="◀️", style=discord.ButtonStyle.secondary)
-            btn_next = Button(label="▶️", style=discord.ButtonStyle.secondary)
-            btn_prev.callback = prev
-            btn_next.callback = next
-            view.add_item(btn_prev)
-            view.add_item(btn_next)
+            prev = Button(label="◀️", style=discord.ButtonStyle.secondary)
+            nextb = Button(label="▶️", style=discord.ButtonStyle.secondary)
+
+            async def prev_page(interaction):
+                await show_page(interaction, (idx - 1) % len(pages))
+
+            async def next_page(interaction):
+                await show_page(interaction, (idx + 1) % len(pages))
+
+            prev.callback = prev_page
+            nextb.callback = next_page
+            view.add_item(prev)
+            view.add_item(nextb)
 
         return view
 
-    await inter.response.send_message(
-        f"📄 Page {page_index+1}/{len(pages)} (Showing {len(list_to_show)} results)",
-        view=make_view(pages[page_index]),
-        ephemeral=True
+    embed = discord.Embed(
+        title=f"📄 Skill Plates — Page 1/{len(pages)}",
+        description="\n".join(f"• **{p['name']}**" for p in pages[0]),
+        color=discord.Color.blurple()
     )
 
-
-# ================= SUGGEST COMMAND (DROPDOWN) =================
-
-GEM_COLORS = [
-    ("🟥 Red", "Red"),
-    ("🟨 Yellow", "Yellow"),
-    ("🟦 Blue", "Blue"),
-    ("🟪 Purple", "Purple"),
-    ("🟩 Green", "Green"),
-    ("⬛ Black", "Black"),
-]
-
-PLATE_TYPES = [
-    ("🪤 Trap", "Trap"),
-    ("💀 Botch", "Botch"),
-    ("🩸 Bleed", "Bleed"),
-    ("✖️ Multiply", "Multiply"),
-    ("🛡️ Armor", "Armor"),
-    ("💚 Heal", "Heal"),
-    ("💥 Blast", "Blast"),
-    ("⚡ Gain MP", "Gain MP"),
-    ("🔄 Generate", "Generate"),
-]
-
-
-@bot.tree.command(name="suggest", description="Suggest plates by choosing gem color & effect type.")
-async def suggest(inter):
-    class ColorSelect(Select):
-        def __init__(self):
-            options = [discord.SelectOption(label=label, value=value) for label, value in GEM_COLORS]
-            super().__init__(placeholder="Select Gem Color", options=options)
-
-        async def callback(self, interaction):
-            selected_color = self.values[0]
-
-            class TypeSelect(Select):
-                def __init__(self):
-                    options = [discord.SelectOption(label=label, value=value) for label, value in PLATE_TYPES]
-                    super().__init__(placeholder="Select Plate Type", options=options)
-
-                async def callback(self, interaction2):
-                    selected_type = self.values[0]
-                    query = f"{selected_color} {selected_type}"
-                    results = search(query)
-
-                    if not results:
-                        return await interaction2.response.send_message(
-                            f"❌ No plates match `{selected_color} {selected_type}`.", ephemeral=True
-                        )
-
-                    await send_single(interaction2, results[0])
-                    await send_related(interaction2, results)
-
-            view2 = View()
-            view2.add_item(TypeSelect())
-            await interaction.response.send_message(
-                f"🎨 **Color Selected:** {selected_color}\nNow choose the plate type:",
-                view=view2, ephemeral=True
-            )
-
-    view = View()
-    view.add_item(ColorSelect())
-    await inter.response.send_message("🔍 **Let's find you a plate!**\nChoose gem color:", view=view, ephemeral=True)
-
+    await inter.response.send_message(embed=embed, view=make_view(0))
 
 bot.run(TOKEN)
