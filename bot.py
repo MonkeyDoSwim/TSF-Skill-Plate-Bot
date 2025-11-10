@@ -4,6 +4,7 @@ from pathlib import Path
 import discord
 from discord.ext import commands
 from discord import app_commands
+from discord.ui import View, Select, Button
 from bs4 import BeautifulSoup
 
 # ================= CONFIG =================
