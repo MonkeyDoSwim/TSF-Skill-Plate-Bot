@@ -1,0 +1,105 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><meta charset="utf-8"><title>Support Web Chat Launcher</title><style>
+    .hs-websdk-messenger {
+      animation-duration: .12s;
+      animation-name: hs-websdk-messenger-icon-clockwise-rotation;
+      animation-fill-mode: both;
+      animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .hs-websdk-messenger-reverse {
+      animation-delay: .1s;
+      animation-duration: .2s;
+      animation-name: hs-websdk-messenger-icon-anti-clockwise-rotation;
+      animation-fill-mode: both;
+      fill: white;
+      animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .hs-websdk-launcher-clockwise {
+      animation-duration: .3s;
+      animation-name: hs-websdk-launcher-btn-clockwise;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+
+    .hs-websdk-launcher-anti-clockwise {
+      animation-duration: .3s;
+      animation-name: hs-websdk-launcher-btn-anti-clockwise;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+
+    @keyframes hs-websdk-messenger-icon-clockwise-rotation {
+      0% {
+        opacity: 1;
+        transform: rotate(0deg);
+        transform-origin: center center;
+      }
+      100% {
+        opacity: .1;
+        transform: rotate(45deg);
+        transform-origin: center center;
+      }
+    }
+
+    @keyframes hs-websdk-messenger-icon-anti-clockwise-rotation {
+      0% {
+        opacity: 0;
+        transform: rotate(45deg);
+        transform-origin: center center;
+      }
+      100% {
+        opacity: 1;
+        transform: rotate(0deg);
+        transform-origin: center center;
+      }
+    }
+
+    @keyframes hs-websdk-launcher-btn-clockwise {
+      0% {
+        background: linear-gradient(131deg, #43106ebf, #43106e 123%);
+        opacity: 1;
+      }
+      50% {
+        background: linear-gradient(131deg, #43106ebf, #43106e 123%);
+        opacity: .1;
+      }
+      51% {
+        background: #1118270d;
+        opacity: .75;
+      }
+      100% {
+        opacity: 1;
+        background: #1118270d;
+      }
+    }
+
+    @keyframes hs-websdk-launcher-btn-anti-clockwise {
+      0% {
+        opacity: 1;
+        background: #1118270d;
+      }
+      30% {
+        background: #1118270d;
+        opacity: .75;
+      }
+      31% {
+        background: linear-gradient(131deg, #43106ebf, #43106e 123%);
+        opacity: .1;
+      }
+      100% {
+        background: linear-gradient(131deg, #43106ebf, #43106e 123%);
+        opacity: 1;
+      }
+    }
+  </style><link rel="stylesheet" href="content-style.css"></head><body><button aria-label="Open Chat" style="position: absolute; top: 16px; left: 16px; width: 48px; height: 48px; background: linear-gradient(131deg, rgba(67, 16, 110, 0.75), rgb(67, 16, 110) 122%); border-radius: 50%; cursor: pointer; box-sizing: border-box; padding: 12px 10px 8px; border: medium; outline-offset: -4px; outline: rgba(0, 103, 244, 0.4) solid 0px; box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 14px 0px; display: block;"><span style="background: rgb(233, 75, 75); border-radius: 50%; color: rgb(255, 255, 255); width: 20px; height: 20px; line-height: 20px; text-align: center; font-size: 12px; position: absolute; top: 0px; right: 0px; font-family: sans-serif; z-index: 9999999; box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px; left: auto; display: none;"></span><span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="60%" height="60%" viewBox="0 0 512 512" style="top: 10px; left: 10px; position: absolute;">
+      <path fill="#1118270d" stroke="currentColor" class="close-icon" stroke-linecap="round" stroke-linejoin="round" style="visibility: hidden;" stroke-width="32" d="M368 368L144 144M368 144L144 368"></path>
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="21px" height="21px" viewBox="0 0 512 512" style="top: 14px; left: 14px; position: absolute;">
+      <path fill="#FFFFFF" class="messenger-icon" stroke="currentColor" d="M144 464a16 16 0 01-16-16v-64h-24a72.08 72.08 0 01-72-72V120a72.08
+        72.08 0 0172-72h304a72.08 72.08 0 0172 72v192a72.08 72.08 0 01-72
+        72H245.74l-91.49 76.29A16.05 16.05 0 01144 464z"></path>
+    </svg>
+  </span></button></body></html>
